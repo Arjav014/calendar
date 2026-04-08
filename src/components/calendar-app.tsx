@@ -2,6 +2,7 @@
 
 import { useCalendar } from "@/hooks/use-calendar";
 import { HeroPanel } from "./hero-panel";
+import { SavedNotesList } from "./saved-notes";
 import { CalendarGrid } from "./calendar-grid";
 import { NotesSection } from "./notes-section";
 import { MonthNavigation } from "./month-navigation";
@@ -19,17 +20,26 @@ export function CalendarApp() {
     handleDateClick,
     handleDateHover,
     clearSelection,
+    setSelectedRange,
   } = useCalendar();
 
   const meta = getMonthMetadata(currentMonth.getMonth());
 
   return (
-    <div className="w-full h-full flex flex-col lg:flex-row bg-card rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:shadow-[0_20px_60px_rgb(0,0,0,0.08)] border border-border/80 overflow-hidden min-h-[800px]">
-      {/* Left Panel: Hero */}
-      <HeroPanel currentMonth={currentMonth} />
+    <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row bg-card rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:shadow-[0_20px_60px_rgb(0,0,0,0.08)] border border-border/80 overflow-hidden lg:min-h-[800px]">
+      {/* Left Panel: Hero and Notes List */}
+      <div className="w-full lg:w-2/5 flex flex-col border-b lg:border-b-0 lg:border-r border-border bg-stone-100/30">
+        <HeroPanel currentMonth={currentMonth} />
+        <div className="flex-1 flex flex-col max-h-[400px] lg:max-h-[550px] overflow-hidden">
+          <SavedNotesList 
+            currentMonth={currentMonth} 
+            onNoteClick={setSelectedRange} 
+          />
+        </div>
+      </div>
 
-      {/* Right Panel: Calendar & Notes */}
-      <div className="flex-1 flex flex-col p-6 sm:p-8 md:p-12 z-10 bg-card rounded-2xl lg:rounded-none lg:rounded-r-2xl border-l-0 lg:border-l border-border relative">
+      {/* Right Panel: Calendar & Notes Form */}
+      <div className="flex-1 flex flex-col p-6 sm:p-8 md:p-12 z-10 bg-card lg:rounded-none lg:rounded-r-2xl relative shrink-0">
         <MonthNavigation
           currentMonth={currentMonth}
           onNext={handleNextMonth}
@@ -66,7 +76,11 @@ export function CalendarApp() {
               )}
             </div>
             
-            <NotesSection currentMonth={currentMonth} />
+            <NotesSection 
+              currentMonth={currentMonth} 
+              selectedRange={selectedRange}
+              clearSelection={clearSelection}
+            />
           </div>
         </div>
       </div>

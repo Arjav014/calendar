@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
-      <body className="antialiased min-h-screen relative">{children}</body>
+      <body className="antialiased min-h-screen relative" suppressHydrationWarning>{children}</body>
     </html>
   );
 }

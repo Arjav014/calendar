@@ -4,31 +4,51 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { format } from "date-fns";
 import { PenLine, Save } from "lucide-react";
 import { useEffect, useState } from "react";
+import { SavedNote } from "@/lib/calendar-utils";
+import { DateRange } from "@/hooks/use-calendar";
 
 interface NotesSectionProps {
   currentMonth: Date;
+  selectedRange: DateRange;
+  clearSelection: () => void;
 }
 
-export function NotesSection({ currentMonth }: NotesSectionProps) {
+export function NotesSection({ currentMonth, selectedRange, clearSelection }: NotesSectionProps) {
   const monthKey = format(currentMonth, "yyyy-MM");
-  const [syncedNotes, setSyncedNotes] = useLocalStorage<string>(`calendar-notes-${monthKey}`, "");
-  const [localNotes, setLocalNotes] = useState(syncedNotes);
+  const [savedNotes, setSavedNotes] = useLocalStorage<SavedNote[]>(`calendar-notes-list-${monthKey}`, []);
+  const [localNotes, setLocalNotes] = useState("");
   const [isSaved, setIsSaved] = useState(true);
 
-  // Sync state when month changes or when syncedNotes updates externally
+  // Sync state when month changes
   useEffect(() => {
-    setLocalNotes(syncedNotes);
+    setLocalNotes("");
     setIsSaved(true);
-  }, [syncedNotes, monthKey]);
+  }, [monthKey]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setLocalNotes(e.target.value);
-    setIsSaved(e.target.value === syncedNotes);
+    setIsSaved(e.target.value.trim() === "");
   };
 
   const handleSave = () => {
-    setSyncedNotes(localNotes);
+    if (!localNotes.trim()) return;
+
+    const newNote: SavedNote = {
+      id: crypto.randomUUID(),
+      text: localNotes,
+      range: {
+        start: selectedRange.start ? selectedRange.start.toISOString() : null,
+        end: selectedRange.end ? selectedRange.end.toISOString() : null,
+      },
+      createdAt: new Date().toISOString()
+    };
+
+    setSavedNotes([...savedNotes, newNote]);
+    setLocalNotes("");
     setIsSaved(true);
+    
+    // Clear highlighting as requested
+    clearSelection();
   };
 
   return (

@@ -9,6 +9,16 @@ import {
   format,
 } from "date-fns";
 
+export interface SavedNote {
+  id: string;
+  text: string;
+  range: {
+    start: string | null;
+    end: string | null;
+  };
+  createdAt: string;
+}
+
 export function getCalendarDays(month: Date): Date[] {
   const monthStart = startOfMonth(month);
   const monthEnd = endOfMonth(month);

@@ -65,5 +65,6 @@ export function useCalendar() {
     handleDateClick,
     handleDateHover,
     clearSelection,
+    setSelectedRange,
   };
 }

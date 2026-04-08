@@ -14,9 +14,6 @@ export function HeroPanel({ currentMonth }: HeroPanelProps) {
   const monthIndex = currentMonth.getMonth();
   const year = currentMonth.getFullYear();
   const meta = getMonthMetadata(monthIndex);
-  
-  const monthKey = format(currentMonth, "yyyy-MM");
-  const [syncedNotes] = useLocalStorage<string>(`calendar-notes-${monthKey}`, "");
 
   // Generate dynamic, organic SVG paths for the abstract art based on month
   // Just changing control points slightly based on month index for a shifting liquid feel
@@ -25,7 +22,7 @@ export function HeroPanel({ currentMonth }: HeroPanelProps) {
   const pathData2 = `M 40 ${60 + offset/3} Q ${80 - offset/2} ${10 + offset/2} 130 40 T 170 ${90 - offset/4} Q 150 160 100 ${140 + offset/3} T 30 110 Q 10 80 40 ${60 + offset/3} Z`;
 
   return (
-    <div className={`relative h-full min-h-[300px] w-full lg:w-2/5 p-8 flex flex-col justify-between overflow-hidden lg:rounded-l-2xl rounded-t-2xl lg:rounded-tr-none ${meta.bgAccent} transition-colors duration-700 ease-in-out border-b lg:border-b-0 lg:border-r border-border backdrop-blur-sm shadow-inner`}>
+    <div className={`relative min-h-[300px] lg:min-h-[400px] w-full p-8 flex flex-col justify-between overflow-hidden lg:rounded-tl-2xl rounded-t-2xl lg:rounded-tr-none ${meta.bgAccent} transition-colors duration-700 ease-in-out border-b border-border backdrop-blur-sm shadow-inner`}>
       {/* Background Abstract Art */}
       <div className="absolute inset-0 opacity-40 pointer-events-none mix-blend-multiply overflow-hidden scale-110 flex items-center justify-center">
         <AnimatePresence mode="wait">
@@ -79,25 +76,6 @@ export function HeroPanel({ currentMonth }: HeroPanelProps) {
           <p className="text-muted-foreground text-sm max-w-[200px] leading-relaxed font-sans">
             Select a date range and save notes underneath to attach them to {meta.title}.
           </p>
-
-          {/* Display Saved Notes */}
-          {syncedNotes && (
-            <AnimatePresence>
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-4 rounded-xl bg-background/40 backdrop-blur-md border border-border/40 shadow-sm relative overflow-hidden group"
-              >
-                <div className="absolute top-3 right-3 text-muted-foreground/40">
-                  <Pin className="w-3.5 h-3.5" />
-                </div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground/70 mb-2">Saved Note</h4>
-                <p className="text-sm font-sans text-foreground/90 whitespace-pre-wrap leading-relaxed italic line-clamp-4">
-                  "{syncedNotes}"
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          )}
         </div>
       </div>
     </div>
