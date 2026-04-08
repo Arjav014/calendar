@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Interactive Web Calendar
 
-## Getting Started
+Welcome to the Interactive Calendar! This project is a minimalist, modern, and highly responsive web calendar built to replicate the tactile feel of an editorial stationary planner.
 
-First, run the development server:
+## 🎨 The Aesthetic Choices
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+When I set out to build this, I wanted to stay away from the neon, glowing, and "cyber-tech" aesthetics that overly saturated modern web applications. 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Instead, I focused intensely on a **Warm Editorial Stationery** vibe:
+- **Typography:** I leaned heavily into using **Playfair Display** for our elegant hero headings and **DM Sans** for rigorous, legible grid structures. 
+- **The Color Palette:** The interface is unified by earthy, matte tones—think terracotta, sage green, cool stone grey, and an off-white ivory surface. 
+- **Seasonal Visuals:** The left-hand panel dynamically adapts to the current month. Using generated raster illustrations blending directly into the parent container via `mix-blend-multiply`, the calendar gives you a tactile, shifting environment without losing typographic legibility.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## ✨ Core Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Fluid Date Range Selection:** Selecting a start and end date is completely seamless, natively tracking your hover previews, handling single-day choices, and gracefully rolling over weekends.
+2. **Animated Mechanics:** Everything—from the background image transitions to the date cell clicking mechanics—are animated cleanly through `framer-motion`, giving physical "weight" to interacting with the component.
+3. **Monthly Notes & Memos:** Rather than setting up a massive local database framework, I built a bespoke contextual Note ecosystem. A note is specifically written, saved, tracked, and natively restored directly out of your browser's Local Storage on a *per month* basis. You can click any previously saved note block on the side panel to instantly warp back and highlight the matching calendar dates.
+4. **Complete Responsiveness:** The two-panel split grid flawlessly transforms into a deeply scrollable stacked stack for mobile users.
 
-## Learn More
+## 🛠 Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js (App Router)** - The infrastructural backbone and optimal SSR engine.
+- **TypeScript** - Enforcing robust state and type-safety mechanisms across our bespoke hooks.
+- **Tailwind CSS v4** - Fast and composable utility class systems.
+- **Date-fns** - Lightweight, immutability-safe date calculation logic.
+- **Framer Motion** - Handling all the liquid smooth animation structures.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 How to Run Locally
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+If you want to view the calendar environment firsthand, you can easily launch it natively:
 
-## Deploy on Vercel
+1. **Install Dependencies**
+   First, make sure Node.js is installed. In the root of the file directory, run:
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Launch the Development Server**
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Explore**
+   Navigate to `http://localhost:3000` via your browser. You can click on any dates to experiment with range highlighting and memo writing! You can also use your keyboard's left and right arrow keys to easily jump around months.
