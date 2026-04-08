@@ -3,8 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { getMonthMetadata } from "@/lib/calendar-utils";
 import { format } from "date-fns";
-import { useLocalStorage } from "@/hooks/use-local-storage";
-import { Pin } from "lucide-react";
+import Image from "next/image";
 
 interface HeroPanelProps {
   currentMonth: Date;
@@ -15,29 +14,37 @@ export function HeroPanel({ currentMonth }: HeroPanelProps) {
   const year = currentMonth.getFullYear();
   const meta = getMonthMetadata(monthIndex);
 
-  // Generate dynamic, organic SVG paths for the abstract art based on month
-  // Just changing control points slightly based on month index for a shifting liquid feel
-  const offset = monthIndex * 15;
-  const pathData = `M 20 ${80 + offset/2} Q ${50 + offset} ${20 - offset/3} 100 ${50 + offset/4} T 180 ${40 + offset/2} Q 190 120 150 ${160 - offset/2} T 50 180 Q 5 ${150 + offset/3} 20 ${80 + offset/2} Z`;
-  const pathData2 = `M 40 ${60 + offset/3} Q ${80 - offset/2} ${10 + offset/2} 130 40 T 170 ${90 - offset/4} Q 150 160 100 ${140 + offset/3} T 30 110 Q 10 80 40 ${60 + offset/3} Z`;
+  // Map month index to seasons (Northern Hemisphere)
+  const seasonMap: Record<number, string> = {
+    0: "winter", 1: "winter", 2: "spring",
+    3: "spring", 4: "spring", 5: "summer",
+    6: "summer", 7: "summer", 8: "autumn",
+    9: "autumn", 10: "autumn", 11: "winter"
+  };
+  const season = seasonMap[monthIndex];
 
   return (
     <div className={`relative min-h-[300px] lg:min-h-[400px] w-full p-8 flex flex-col justify-between overflow-hidden lg:rounded-tl-2xl rounded-t-2xl lg:rounded-tr-none ${meta.bgAccent} transition-colors duration-700 ease-in-out border-b border-border backdrop-blur-sm shadow-inner`}>
-      {/* Background Abstract Art */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none mix-blend-multiply overflow-hidden scale-110 flex items-center justify-center">
+      {/* Background Illustrated Art */}
+      <div className="absolute inset-0 pointer-events-none mix-blend-multiply overflow-hidden flex items-center justify-center">
         <AnimatePresence mode="wait">
-          <motion.svg
-            key={monthIndex}
-            viewBox="0 0 200 200"
-            className="w-[150%] h-[150%] opacity-60 drop-shadow-2xl blur-2xl"
-            initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 1.1, rotate: 10 }}
+          <motion.div
+            key={season} // Animate background swap on season change
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }} // keep opacity subtle to ensure text readability
+            exit={{ opacity: 0 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0"
           >
-            <path d={pathData} fill={meta.stroke} />
-            <path d={pathData2} fill={meta.stroke} opacity="0.5" />
-          </motion.svg>
+            <Image
+              src={`/seasons/${season}.png`}
+              alt={`${season} illustration`}
+              fill
+              sizes="(max-width: 1024px) 100vw, 40vw"
+              className="object-cover scale-105"
+              priority
+            />
+          </motion.div>
         </AnimatePresence>
       </div>
 
@@ -52,7 +59,7 @@ export function HeroPanel({ currentMonth }: HeroPanelProps) {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={`font-serif text-6xl md:text-7xl lg:text-8xl tracking-tight leading-none ${meta.accentColor}`}
+            className={`font-serif text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-none ${meta.accentColor}`}
           >
             {format(currentMonth, "MMMM")}
           </motion.h1>
